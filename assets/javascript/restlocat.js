@@ -23,6 +23,11 @@ var configData = {
 var map;
 var infowindow;
 var testTheater = { lat: 41.9499, lng: -87.6638 };
+//console.log(parseFloat(db_firebase_rec_in.field.center_locat_GPS_lat));
+//console.log(parseFloat(db_firebase_rec_in.field.center_locat_GPS_lon));
+var mapCenter;
+//var testTheater = { lat: db_firebase_rec_in.play_1.locat_GPS_lat, lng: db_firebase_rec_in.play_1.locat_GPS_lon };
+
 var testHome;
 
 
@@ -31,13 +36,16 @@ var initMap = function () {
     //Using Coordinates for Music Box Theater. 
     //This would be coordinates of theater pulled in from user selection
     //testTheater = { lat: 41.9499, lng: -87.6638 };
+    console.log("init the map");
+    mapCenter = { lat: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lon) };
 
-    testHome = {lat: parseFloat(theaterObj.searchLoc.lat), lng: parseFloat(theaterObj.searchLoc.long)};
-
+    //testHome = {lat: parseFloat(theaterObj.searchLoc.lat), lng: parseFloat(theaterObj.searchLoc.long)};
+    testHome = { lat: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lon) };
+    testTheater = { lat: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lon) };
     //Map Options
     map = new google.maps.Map(document.getElementById('map'), {
 
-        center: testTheater,
+        center: mapCenter,
         zoom: 15,
         //Custom Styles for Map Background
         styles: [
@@ -278,7 +286,7 @@ var initMap = function () {
     //Add Home Marker
     var homeIcon = {
         //Variable to add in Custom Image of Movie theater
-        url: "assets/images/yellow-house.gif", // url
+        url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
@@ -291,7 +299,7 @@ var initMap = function () {
     //Add Theater Marker
     var theaterIcon = {
         //Variable to add in Custom Image of Movie theater
-        url: "assets/images/movie.png", // url
+        url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
@@ -319,12 +327,14 @@ var initMap = function () {
     //Function to run Nearby Search
     infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(map);
+    /*
     service.nearbySearch({
         location: testTheater,
         radius: configData.restaurantSearchDist,
         type: ['restaurant'],
         rankBy: google.maps.places.RankBy.PROMINENCE
     }, callback);
+    */
     // }
 
     //For Loop to Create Markers for all Restaurants pulled in by Nearby Search
@@ -367,6 +377,7 @@ var initMap = function () {
 
             function callback(place, status) {
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    //**** comment out right now for markers
                     createMarker(place);
                     console.log(place);
                     // If/Else Statement to assign plain text to price levels in place of numbers

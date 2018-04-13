@@ -67,6 +67,9 @@
                     <button type="button" class="btn btn-default btn-lg btn-info" style="margin: 0px 0px 0px 50px;">
                         <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                     </button>
+                    <button id="btn-map" type="button" class="btn btn-default btn-lg" style="margin: 0px 0px 0px 50px;">
+                        <span>Map </span>
+                    </button>
                     <div class="wrapper">
                         <div class="row">
                             <div id="inputSect" style="margin:3px; padding:3px">
@@ -126,13 +129,13 @@
 
 
                         <div class="row">
-                                <div class="col-md-2">
-                                    <label> </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label id=""> </label>
-                                </div>
-                            </div>    
+                            <div class="col-md-2">
+                                <label> </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id=""> </label>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-2">
                                 <label>Distances:</label>
@@ -209,6 +212,20 @@
                             <button id="bttnUserInput">Start Search</button>
                 -->
 
+            </div>
+            <div class="panel panel-info" style="padding:3px; margin: 3px;">
+                <div class="panel-body" style="padding:3px; margin: 3px;">
+
+                    <div id="divMap" style="height:640px; width:420px; padding:2px">
+                        <div class="modal-content" style="height:90%; width:90%; margin:0px; padding: 2px">
+                            <span>
+                                <h2>Map</h2>
+                            </span>
+                            <span id="closeModMap" class="close">&times;</span>
+                            <div id="map" style="height:85%; width:100%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -337,7 +354,7 @@
                     <h2>Map</h2>
                 </span>
                 <span id="closeModMap" class="close">&times;</span>
-                <div id="map" style="height:85%; width:100%"></div>
+                <div id="map-orig" style="height:85%; width:100%"></div>
             </div>
         </div>
 
@@ -375,7 +392,7 @@
                 $('#ball-dist-play1').text(ballDistObj.dist_ball_play_1);
                 $('#ball-dist-play2').text(ballDistObj.dist_ball_play_2);
                 $('#ball-dist-total').text(ballDistObj.dist_players);
-                console.log( ballDistObj.dist_players );
+                console.log(ballDistObj.dist_players);
             };
 
             var dispAllPage2 = function (dispElem) {
@@ -423,6 +440,12 @@
                 });
                 $(document.body).on("click", ".close-Info", function () {
                     $("#modInfo").css("display", "none");
+                });
+
+                $(document.body).on("click", "#btn-map", function () {
+                    //pull up the map
+                    console.log("turning on the map");
+                    initMap();
                 });
 
                 $("#bttnUserInput").on("click", function (event) {
