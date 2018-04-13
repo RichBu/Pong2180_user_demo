@@ -348,15 +348,26 @@ var db_ReadBallRec = function () {
             db_firebase_rec_in = jQuery.extend(true, {}, snap.val());
             var dbfi = db_firebase_rec_in; //short cut notations
 
-            $('#ball-pos-x').text(dbfi.ball_curr_pos.pos_X);
-            $('#ball-pos-y').text(dbfi.ball_curr_pos.pos_Y);
+            $('#ball-pos-x').text(numeral(dbfi.ball_curr_pos.pos_X).format('0,0.00'));
+            $('#ball-pos-y').text(numeral(dbfi.ball_curr_pos.pos_Y).format('0,0.00'));
             $('#ball-pos-lat').text(dbfi.ball_curr_pos.loc_GPS_lat);
             $('#ball-pos-lon').text(dbfi.ball_curr_pos.loc_GPS_lon);
-            $('#ball-dist-play1').text( dbfi.dist.play_1 );
-            $('#loc-play-1').text( dbfi.play_1.locat_addr );
-            $('#ball-dist-play2').text( dbfi.dist.play_2 );
-            $('#loc-play-1').text( dbfi.play_2.locat_addr );
-            $('#ball-dist-total').text( dbfi.dist.between );
+            $('#ball-dist-play1').text(numeral(dbfi.dist.play_1).format('0,0.00') + " ft");
+            $('#ball-miles-play1').text(numeral(dbfi.dist.play_1 / 5280.0).format('0,0.00') + " mi");
+            $('#ball-time-play1-sec').text(numeral(dbfi.time.play_1).format('0,0.00') + " sec");
+            $('#ball-time-play1-min').text(numeral(dbfi.dist.play_1 / 60.0).format('0,0.00') + " min");
+
+            $('#loc-play-1').text(dbfi.play_1.locat_addr);
+            $('#ball-dist-play2').text(numeral(dbfi.dist.play_2).format('0,0.00') + " ft");
+            $('#ball-miles-play2').text(numeral(dbfi.dist.play_2 / 5280.0).format('0,0.00') + " mi");
+            $('#loc-play-2').text(dbfi.play_2.locat_addr);
+            $('#ball-time-play2-sec').text(numeral(dbfi.time.play_2).format('0,0.00') + " sec");
+            $('#ball-time-play2-min').text(numeral(dbfi.dist.play_2 / 60.0).format('0,0.00') + " min");
+
+            $('#ball-dist-total').text(dbfi.dist.between);
+            $('#ball-dist-miles').text(numeral(dbfi.dist.between / 5280.0).format('0,0.00') + " mi");
+            $('#ball-vel-in').text( numeral(dbfi.ball_physics.curr_vel).format('0,0.00') + " in/sec");
+            $('#ball-vel-mph').text(numeral( dbfi.ball_physics.curr_vel / 12.0 / 5280.0 * 3600.0 ).format('0,0.00') + " mph");
 
             //ball_calcs(snap, false);
         });
