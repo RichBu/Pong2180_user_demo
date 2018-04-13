@@ -353,7 +353,9 @@ var db_ReadBallRec = function () {
             $('#ball-pos-lat').text(dbfi.ball_curr_pos.loc_GPS_lat);
             $('#ball-pos-lon').text(dbfi.ball_curr_pos.loc_GPS_lon);
             $('#ball-dist-play1').text( dbfi.dist.play_1 );
+            $('#loc-play-1').text( dbfi.play_1.locat_addr );
             $('#ball-dist-play2').text( dbfi.dist.play_2 );
+            $('#loc-play-1').text( dbfi.play_2.locat_addr );
             $('#ball-dist-total').text( dbfi.dist.between );
 
             //ball_calcs(snap, false);
