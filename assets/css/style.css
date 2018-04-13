@@ -1,0 +1,270 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    font-family: 'Courgette', cursive;
+    /*color: rgba(255, 89, 89, 1);*/
+    color: beige;
+    font-size: 28px;
+}
+
+p {
+    margin: 30px;
+}
+
+header.container {
+    width: 100%;;
+}
+
+h1 {
+    font-family: 'Lobster', cursive;
+    font-size: 62px;
+}
+
+h2{
+    text-align: center;
+}
+
+h3 {
+    margin-left: 10px;
+}
+
+label {
+    font-size: 22px;
+}
+
+form {
+    margin: 20px;
+}
+
+hr {
+    opacity: 0;
+}
+
+.navbar-default {
+    background-color: rgba(66, 1, 13, 1);
+    background-size: cover;
+    box-shadow: 12px 12px 12px 1px rgba(255,255,255,.2);
+    border: none;
+    border-radius: 0;
+}
+
+.modal {
+    top: 30%;
+    width: 50%;
+    height: 47%;
+    left: 20%;
+    text-align: center;
+}
+
+div.modal-content {
+    height: 70%;
+}
+
+ .loading {
+    background-color: rgba(66, 1, 13, 1);
+    background-image: url('../images/loadingimage.gif');
+    background-position: center;
+}
+
+.img-thumbnail {
+    background-color: rgba(66, 1, 13, 1);
+    margin: 5px;
+    max-width: none;
+    width: 82px;
+    border-color: rgba(255,255,255,0);
+}
+
+.card {
+    display: inline-block;
+    border: 1px solid black;
+    margin: 2px;
+    padding: 5px;
+    background-image: linear-gradient(180deg, grey, white, grey);
+    color: black;
+}
+
+.navbar-fixed-bottom {
+	background-color: rgba(66, 1, 13, 1);
+	color: rgba(255,255,255,.7);
+	padding: 20px;
+}
+
+.form-control {
+    width: 50%;
+}
+
+.specialFont {
+    font-family: 'Lobster', cursive;
+  }
+  
+.panel {
+    margin: 10px;
+    box-shadow: 12px 12px 12px 1px rgba(255,255,255,.2);
+}
+  
+  .panel-body {
+      color: black;
+  }
+  
+  /* The side navigation menu */
+  .sidenav {
+      height: 100%;
+      width: 0; /* 0 width - change this with JavaScript */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      right: 0;
+      background-color: black;
+      overflow-x: hidden; /* Disable horizontal scroll */
+      padding-top: 60px; /* Place content 60px from the top */
+      transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  }
+  
+/* The navigation menu links */
+.sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+      text-align: right;
+      margin-right: 10px;
+}
+  
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+      color: #f1f1f1;
+}
+  
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 36px;
+      margin-right: 50px;
+}
+  
+.carousel-item {
+      display: inline-block;
+      border: 1px solid black;
+}
+
+.carousel-inner {
+    padding: 10px;
+}
+
+.multi-item-carousel.carousel-inner>.item {
+    transition: 500ms ease-in-out left;
+}
+
+#main1 {
+    display: initial;
+}
+
+#main2 {
+    display: none;
+}
+
+#main3 {
+    display: none;
+}
+
+#movieSearch {
+    margin: 5% 0 0 42%;
+}
+
+#distance {
+    color: black;
+}
+
+#navIcon {
+  width: 50%;
+}
+
+#cityZipSearch {
+    margin: 0 0 0 25%;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+#infowindow-header {
+    color: rgba(66, 1, 13, 1);
+}
+
+#theatre-name-infowindow,
+#theatre-infowindow {
+    color: black;
+    line-height: 15px;
+}
+
+#modMap {
+    min-height: 100%;
+    top: 10%;
+}
+
+@media screen and (max-width: 768px) {
+
+    #navIcon {
+      width: 90%;
+    }
+
+}
+
+/*Adding styles to fix header overlap on smaller screens*/
+@media screen and (max-width: 530px) {
+
+    h1 {
+        font-size: 42px;
+    }
+
+    #navIcon {
+      width: 200%;
+    }
+
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;
+    }
+
+    .sidenav a {font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    body {
+        background-size: cover;
+    }
+
+    .sidenav {
+        padding: 32px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+
+    .sidenav {
+        padding: 10px;
+    }
+
+    #navIcon {
+        width: 120%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #modMap {
+        height: 100%;
+        width: 100%;
+    }
+}
