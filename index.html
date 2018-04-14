@@ -12,7 +12,7 @@
 
     <!-- Bootstrap CDN-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!--    <link rel="stylesheet" href="assets/css/maps.css">    -->
+    <!--    <link rel="stylesheet" href="assets/css/maps.css">    -->
     <link rel="stylesheet" type="text/css" src="assets/css/map-icons.css">
     <link rel="stylesheet" href="assets/css/theater.css">
     <link rel="stylesheet" href="assets/css/style_test.css">
@@ -20,8 +20,8 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="assets/javascript/moment.js"></script>   
-    <script src="assets/javascript/numeral.js"></script>  
+    <script src="assets/javascript/moment.js"></script>
+    <script src="assets/javascript/numeral.js"></script>
 
 </head>
 
@@ -94,8 +94,6 @@
                                 <label id="ball-vel-mph">- - - - </label>
                             </div>
                         </div>
-
-
 
                         <div class="row">
                             <div class="col-md-2">
@@ -177,9 +175,6 @@
 
                     </div>
                 </div>
-                <!---
-                            <button id="bttnUserInput">Start Search</button>
-                -->
 
             </div>
             <div class="panel panel-info" style="padding:3px; margin: 3px;">
@@ -316,7 +311,7 @@
                 //starts the db connection
                 startConnection();
 
-                var updateTimer = setInterval(db_ReadBallRec, 500);
+                //var updateTimer = setInterval(db_ReadBallRec, 500);
 
                 //add click listener to all movie pics
                 //            $(document.body).on("click", ".movie-pic", evalPicClick);

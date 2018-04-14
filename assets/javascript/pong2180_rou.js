@@ -12,7 +12,7 @@ var configData = {
     firebaseStorage: "/games/user",         //prior to tacking on user number
     firebaseMainGame: "/games",
     firebaseStatusFolder: "/status",
-    firebaseRefreshBit: "/status/refreshUsers",
+    firebaseRefreshBit: "/games/time",
     firebaseActive: true
 };
 
@@ -382,9 +382,11 @@ var startConnection = function () {
         });
     */
 
-    /*   add in for refresh bit
+       //add in for refresh bit
         dbRefreshScreenBit.on("value", function (snap) {
-            //refresh bit has been triggers
+            //refresh bit has been triggered
+            db_ReadBallRec();
+            /*
             console.log(snap);
             // If they are connected..
             if (snap.val()) {   //executes with the value is finally set to true
@@ -395,8 +397,10 @@ var startConnection = function () {
             //refresh the user list
             //make sure that it doesn't pop the window open
             dispAllUsersOnPage_start(true);
+            */
         });
     
+/*        
         // When first loaded or when the connections list changes...
         connectionsRef.on("value", function (snap) {
             // Display the viewer count in the html.
