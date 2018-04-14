@@ -29,6 +29,11 @@ var db_firebase_rec_in;
 var dbOppStorageArea;
 var dbRefreshScreenBit;
 
+var playMarker1;
+var playMarker2;
+var ballMarker;
+var isMapOn = false;
+
 var modalInput = document.getElementById('modLogin'); //login
 var modalNewOppReq = document.getElementById('modNewOppReq'); //new opponent request
 var modalInviteWaitAck = document.getElementById('modWaitInviteAck'); //new opponent wait for ACK

@@ -23,6 +23,9 @@ var configData = {
 var map;
 var infowindow;
 var testTheater = { lat: 41.9499, lng: -87.6638 };
+var player_1_icon_loc;
+var player_2_icon_loc;
+var ball_icon_loc;
 //console.log(parseFloat(db_firebase_rec_in.field.center_locat_GPS_lat));
 //console.log(parseFloat(db_firebase_rec_in.field.center_locat_GPS_lon));
 var mapCenter;
@@ -40,8 +43,9 @@ var initMap = function () {
     mapCenter = { lat: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lon) };
 
     //testHome = {lat: parseFloat(theaterObj.searchLoc.lat), lng: parseFloat(theaterObj.searchLoc.long)};
-    testHome = { lat: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lon) };
-    testTheater = { lat: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lon) };
+    player_1_icon_loc = { lat: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lon) };
+    player_2_icon_loc = { lat: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lon) };
+    ball_icon_loc = { lat: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), lng: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon) };
     //Map Options
     map = new google.maps.Map(document.getElementById('map'), {
 
@@ -283,31 +287,45 @@ var initMap = function () {
         ]
     });
 
-    //Add Home Marker
-    var homeIcon = {
+    //player 1 paddle icon
+    var player1icon = {
         //Variable to add in Custom Image of Movie theater
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
-    }; var marker = new google.maps.Marker({
-        position: testHome,
+    }; playMmarker1 = new google.maps.Marker({
+        position: player_1_icon_loc,
         map: map,
-        icon: homeIcon
+        icon: player1icon
     });
 
-    //Add Theater Marker
-    var theaterIcon = {
+    //player 2 paddle icon
+    var player2icon = {
         //Variable to add in Custom Image of Movie theater
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
-    }; var marker = new google.maps.Marker({
-        position: testTheater,
+    }; playMarker2 = new google.maps.Marker({
+        position: player_2_icon_loc,
         map: map,
-        icon: theaterIcon
+        icon: player2icon
     });
+
+    //ball icon
+    var ballIcon = {
+        //Variable to add in Custom Image of Movie theater
+        url: "assets/images/surprisedemoji.png", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+    }; ballMarker = new google.maps.Marker({
+        position: ball_icon_loc,
+        map: map,
+        icon: ballIcon
+    });
+
 
     //Info Window for Theater Marker
 
@@ -320,9 +338,11 @@ var initMap = function () {
     });
 
     //Event Listener for Theater Marker
-    marker.addListener('click', function () {
-        infoWindow.open(map, marker);
+    /*
+    playMarker1.addListener('click', function () {
+        infoWindow.open(map, playMarker1);
     })
+    */
 
     //Function to run Nearby Search
     infowindow = new google.maps.InfoWindow();
@@ -399,7 +419,7 @@ var initMap = function () {
                     };
 
                     //Variable Used to Define Directions from Movie Theater to Selected Restaurant
-                    var directionsURL = 'https://www.google.com/maps/dir/?api=1&origin=' + testTheater.lat + ', ' + testTheater.lng + '&destination=' + place.formatted_address + '&travelmode=driving';
+                    var directionsURL = 'https://www.google.com/maps/dir/?api=1&origin=' + player_1_icon_loc.lat + ', ' + player_1_icon_loc.lng + '&destination=' + place.formatted_address + '&travelmode=driving';
 
                     //Variable to more easily see all elements added to InfoWindow
                     var urlString = '<div id="theatre-infowindow"><strong>' + place.name + '</strong><br>' + '<br>' + '<strong><a href="' + place.website;
@@ -417,4 +437,10 @@ var initMap = function () {
 
         });
     }
+    isMapOn = true;
+};
+
+
+var updateBallIcon = function () {
+    ballMarker.setPosition(new google.maps.LatLng(parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon)));
 };

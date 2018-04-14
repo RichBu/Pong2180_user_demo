@@ -370,6 +370,9 @@ var db_ReadBallRec = function () {
             $('#ball-dist-total').text( numeral(dbfi.dist.between).format('0,0.00') + ' ft' );
             $('#ball-miles-total').text( numeral(dbfi.dist.between / 5280.0 ).format('0,0.00') + ' miles' );
 
+            if (isMapOn==true) {
+                updateBallIcon();
+            };
             //ball_calcs(snap, false);
         });
     }
