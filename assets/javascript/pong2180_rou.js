@@ -180,8 +180,6 @@ var getLocation = function () {
         });
 
     if (configData.dispRichOutput === true) {
-        //modalMap.style.display = "none";
-        //document.getElementById("container-map").style.display = "none";
     };
 };
 
@@ -189,9 +187,6 @@ var getLocation = function () {
 
 var showPosition = function (position) {
     if (configData.dispRichOutput === true) {
-        $("#input-lat").val(numeral(position.coords.latitude).format("0000.000000"));
-        $("#input-lon").val(numeral(position.coords.longitude).format("0000.000000"));
-        $("#input-dist").val(numeral(configData.theaterSearchDist).format("0.0"));
         theaterObj.searchLoc.lat = numeral(position.coords.latitude).format("0000.000000");
         theaterObj.searchLoc.long = numeral(position.coords.longitude).format("0000.000000");
         theaterObj.searchLoc.dist = configData.theaterSearchDist;
@@ -205,6 +200,7 @@ var showPosition = function (position) {
     //next step is to convert to a postal address
     convertGeoToAddr();
 };
+
 
 var convertGeoToAddr = function () {
     var userPositionToAddressURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
@@ -229,6 +225,7 @@ var convertGeoToAddr = function () {
         modalWaitLocation.style.display = "none";
     });
 };
+
 
 var checkAndConvertAddrToGeo = function () {
     // take address typed in an convert to Geo Location
@@ -309,42 +306,9 @@ var doneConvertAddrToGeo = function () {
     //geo conversion is done, continue on
     //turn off wait location
     modalWaitLocation.style.display = "none";
-    theaterObj.doSearchInitial();
 };
 
 
-var geoDistCalcBetweenPoints = function (geoPt1, geoPt2) {
-    //calculate the distance between search
-    //geoPt1  is  { lat: , lng: }
-    var Pt1 = {
-        lat: parseFloat(geoPt1.lat),
-        lng: parseFloat(geoPt1.lng)
-    };
-    var Pt1_lat_Str = numeral(Pt1.lat).format("+0000.000000");
-    var Pt1_lng_Str = numeral(Pt1.lng).format("+0000.000000");
-    Pt1_str = Pt1_lat_Str + "," + Pt1_lng_Str;
-    //Pt1_str = JSON.stringify( Pt1 );    
-
-    var Pt2 = {
-        lat: parseFloat(geoPt2.lat),
-        lng: parseFloat(geoPt2.lng)
-    };
-    var Pt2_lat_Str = numeral(Pt2.lat).format("+0000.000000");
-    var Pt2_lng_Str = numeral(Pt2.lng).format("+0000.000000");
-    Pt2_str = Pt2_lat_Str + "," + Pt2_lng_Str;
-
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix(
-        {
-            origins: [Pt1_str],
-            destinations: [Pt2_str],
-            travelMode: google.maps.TravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.IMPERIAL,
-            avoidHighways: false,
-            avoidTolls: false
-        }, geoDistResponded);
-
-};
 
 
 var startConnection = function () {
@@ -366,71 +330,12 @@ var startConnection = function () {
     // '.info/connected' is a boolean value, true if the client is connected and false if they are not.
     connectedRef = database.ref(".info/connected");
 
-    /*    
-        // When the client's connection state changes...
-        connectedRef.on("value", function (snap) {
-            console.log(snap);
-            // If they are connected..
-            if (snap.val()) {   //executes with the value is finally set to true
-    
-                // Add user to the connections list.
-                var con = connectionsRef.push(true);
-    
-                // Remove user from the connection list when they disconnect.
-                con.onDisconnect().remove();
-            }
-        });
-    */
 
        //add in for refresh bit
         dbRefreshScreenBit.on("value", function (snap) {
             //refresh bit has been triggered
             db_ReadBallRec();
-            /*
-            console.log(snap);
-            // If they are connected..
-            if (snap.val()) {   //executes with the value is finally set to true
-                connectionObj.refreshScreenBit = true;
-            } else {
-                connectionObj.refreshScreenBit = false;
-            };
-            //refresh the user list
-            //make sure that it doesn't pop the window open
-            dispAllUsersOnPage_start(true);
-            */
         });
-    
-/*        
-        // When first loaded or when the connections list changes...
-        connectionsRef.on("value", function (snap) {
-            // Display the viewer count in the html.
-            // The number of online users is the number of children in the connections list.
-            connectionObj.currNumberOfConn = snap.numChildren();
-            $("#numUsers").text(connectionObj.currNumberOfConn + " active connections");
-            //only change the user name if the linkActice switches
-            if (connectionObj.linkActive === false) {
-                connectionObj.linkActive = true;  //link is active
-                connectionObj.currUserRec.outRec.ID = configData.firebaseStorage + moment().valueOf();
-                dbUserStorageArea = database.ref(connectionObj.currUserRec.outRec.ID);
-                dbUserStorageArea.onDisconnect().remove();
-                console.log("started the connection");
-                connectionObj.writeCurrUserRec();
-                //            dispAllUsersOnPage_start(true);   //refresh entire area
-                showLinkButtonStatus();
-    
-                //now get the incoming record's location and set a listener on it
-                dbIncomingRec = database.ref(connectionObj.currUserRec.outRec.ID + "/inRec");
-                dbIncomingRec.on("value", function (snap) {
-                    //a new incoming record
-                    //store the record to memory
-                    connectionObj.writeDBtoInRec(snap);
-                    evalIncomingRec();
-                });
-            };
-            console.log("new connection detected");
-            //setTimeout(dispAllUsersOnPage_start(true), 5000);
-        });
-        */
 };
 
 
@@ -470,7 +375,9 @@ var db_ReadBallRec = function () {
 
             if (isMapOn == true) {
                 updateBallIcon();
-            };
+            } else {
+                initMap();
+            }
             //ball_calcs(snap, false);
         });
     }

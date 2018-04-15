@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="eng-us">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pong 2180 Map</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <!-- Bootstrap CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+
+
+    <div class="panel panel-info" style="padding:3px; margin: 3px;">
+        <div class="panel-body" style="padding:3px; margin: 3px;">
+
+            <div id="divMap" style="height:640px; width:420px; padding:2px">
+                <div class="modal-content" style="height:90%; width:90%; margin:0px; padding: 2px">
+                    <span>
+                        <h2>Pong 2180</h2>
+                    </span>
+                    <div id="map" style="height:85%; width:100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk&libraries=places" async
+        defer></script>
+    <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+
+    <script>
+
+
+
+        var configData = {
+            theaterSearchDist: 6, //2 miles search earea
+            //    restaurantSearchDist: 2, //2 miles
+            restaurantSearchDist: 2 * 1609.34,  //because google is in meters
+            dispRichOutput: false,
+            dispRichTestFalseGPS: false,   //punch in known values for GPS
+            keyAPIgoogle: "AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk",
+            keyAPIgoogleRich: "AIzaSyCrHKoPEISSoDAClePzcHVJVHB7G1-xb6s",
+            firebaseStorage: "/games/user",         //prior to tacking on user number
+            firebaseMainGame: "/games",
+            firebaseStatusFolder: "/status",
+            firebaseRefreshBit: "/games/time",
+            firebaseActive: true
+        };
+
+
+        //communication data here  **** check if this is the correct keys ?
+        //new PONG information
+        var connConfig = {
+            apiKey: "AIzaSyD4DrXTEogIw6pYpxE9aaLWOM1QHGWgo68",
+            authDomain: "pong2108-200301.firebaseapp.com",
+            databaseURL: "https://pong2108-200301.firebaseio.com",
+            projectId: "pong2108-200301",
+            storageBucket: "pong2108-200301.appspot.com",
+            messagingSenderId: "846214007694"
+        };
+
+
+
+        var database;
+        var connectionsRef;
+        var connectedRef;
+        var dbUserGameStorageMain;
+        var dbUserStorageArea;
+        var dbUserStatusFolder;
+
+        var dbIncomingRec;
+        var db_firebase_rec_in;
+        var dbOppStorageArea;
+        var dbRefreshScreenBit;
+
+        var playMarker1;
+        var playMarker2;
+        var ballMarker;
+        var isMapOn = false;
+
+
+        var theaterObj = {   //main object for the whole theater
+            //variables are here
+            searchLoc: {
+                lat: 0.0,
+                long: 0.0,
+                dist: 0.0,
+                addrSearchStr: "",
+                addrOriginalStr: ""   //used when first call the routine
+            },
+
+
+            currTheater: {
+                //theaterRec: theaterRecType,      //the current theater with movie
+                theaterName: "",   //actual name of the theater
+                address: {
+                    dispText: "",
+                    houseNum: "",
+                    street: "",
+                    city: "",
+                    state: "",
+                    zipCode: "",
+                    geoLocLat: 0,
+                    geoLocLong: 0,
+                },
+                distToCenter: 0,
+                travelToTime: 0,
+                travelFromTime: 0,
+                url: "",
+                telephone: "",
+                movie: {
+                    title: "",
+                    rating: "",
+                    runtime: "",
+                    imdb_id: "", // in case want to search other web sites
+                    thumbImgUrl: "",    //thumbnail sized image files
+                    genres: []
+                },
+                EOR: ""    //place keeper, no comma needed
+            }
+
+        };
+
+
+
+        Date.prototype.getUnixTime = function () { return this.getTime() / 1000 | 0 };
+        if (!Date.now) Date.now = function () { return new Date(); }
+        Date.time = function () { return Date.now().getUnixTime(); }
+
+
+
+
+        var ballPosObj = {
+            coord_x: 0,
+            coord_y: 0,
+            coord_lat: 0,
+            coord_lon: 0
+        };
+
+        var ballDistObj = {
+            dist_players: 0.00,
+            dist_ball_play_1: 0.00,
+            dist_ball_play_2: 0.00
+        };
+
+
+        fbase_ballpos_inputObj = {  //variable written to in Firebase
+            game_id: 1,
+            ball_active: 0,         //ball is active if 1
+            time_start_str: "",       //full string for calculating
+            ball_physics: {
+                curr_vel: 0.0,
+                accel_val: 0.0,
+                accel_time: 0.0,
+                angle: 0.0
+            },
+            ball_curr_pos: {
+                pos_X: 0.0,
+                pos_Y: 0.0,
+                pos_Z: 0.0,
+                loc_GPS_lat: 0.0,
+                loc_GPS_lon: 0.0
+            },
+            dist: {
+                between: 0.0,   //in ft
+                play_1: 0.0,    //in ft
+                play_2: 0.0
+            },
+            time: {
+                start_unix: 0,
+                stop_unix: 0,
+                elapsed_unix: 0,
+                play_1: 0.0,        //in secs
+                play_2: 0.0         //in secs
+            },
+            play_1: {
+                id: 1,
+                coord_X: 0.0,
+                coord_Y: 0.0,
+                locat_GPS_lat: 0.0,
+                locat_GPS_lon: 0.0,
+                locat_addr: "",
+                hit_time_win: 0.0
+            },
+            play_2: {
+                id: 1,
+                coord_X: 0.0,
+                coord_Y: 0.0,
+                locat_GPS_lat: 0.0,
+                locat_GPS_lon: 0.0,
+                locat_addr: "",
+                hit_time_win: 0.0
+            },
+            speed_up_fact: 0.0,
+            hit_play_1: 0,
+            hit_play_2: 0
+        };
+
+
+
+        var startConnection = function () {
+            console.log("connecting");
+            firebase.initializeApp(connConfig);
+            console.log("entered the routine");
+            // Create a variable to reference the database.
+            database = firebase.database();
+
+            // connectionsRef references a specific location in our database.
+            // All of our connections will be stored in this directory.
+            connectionsRef = database.ref("/connections");
+            dbUserGameStorageMain = database.ref(configData.firebaseMainGame);
+            dbUserStatusFolder = database.ref(configData.firebaseStatusFolder);
+            dbRefreshScreenBit = database.ref(configData.firebaseRefreshBit);
+
+            // '.info/connected' is a special location provided by Firebase that is updated every time
+            // the client's connection state changes.
+            // '.info/connected' is a boolean value, true if the client is connected and false if they are not.
+            connectedRef = database.ref(".info/connected");
+
+
+            //add in for refresh bit
+            dbRefreshScreenBit.on("value", function (snap) {
+                //refresh bit has been triggered
+                db_ReadBallRec();
+            });
+        };
+
+
+
+        var db_ReadBallRec = function () {
+            //read the entire ball rec
+            if (configData.firebaseActive == true) {
+                //read the data
+                dbIncomingRec = database.ref(configData.firebaseMainGame);
+                //dbIncomingRec.on("value", function (snap) {
+                dbIncomingRec.once("value", function (snap) {
+                    //a valud read was done
+                    db_firebase_rec_in = jQuery.extend(true, {}, snap.val());
+                    var dbfi = db_firebase_rec_in; //short cut notations
+
+
+                    if (isMapOn == true) {
+                        updateBallIcon();
+                    } else {
+                        initMap();
+                    }
+                    //ball_calcs(snap, false);
+                });
+            }
+        };
+
+
+
+        var stopConnection = function () {
+
+        };
+
+
+
+        // maps stuff
+
+        var map;
+        var infowindow;
+        var testTheater = { lat: 41.9499, lng: -87.6638 };
+        var player_1_icon_loc;
+        var player_2_icon_loc;
+        var ball_icon_loc;
+        var mapCenter;
+        var mapBounds;
+
+        var testHome;
+
+
+        var initMap = function () {
+            mapCenter = { lat: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.field.center_locat_GPS_lon) };
+
+            //testHome = {lat: parseFloat(theaterObj.searchLoc.lat), lng: parseFloat(theaterObj.searchLoc.long)};
+            player_1_icon_loc = { lat: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_1.locat_GPS_lon) };
+            player_2_icon_loc = { lat: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lat), lng: parseFloat(db_firebase_rec_in.play_2.locat_GPS_lon) };
+            ball_icon_loc = { lat: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), lng: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon) };
+            //Map Options
+            map = new google.maps.Map(document.getElementById('map'), {
+
+                center: mapCenter,
+                zoom: 15,
+                //Custom Styles for Map Background
+                styles: [
+                    {
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#1d2c4d"
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#8ec3b9"
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#1a3646"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative.country",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                            {
+                                "color": "#4b6878"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative.land_parcel",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#64779e"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative.province",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                            {
+                                "color": "#4b6878"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape.man_made",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                            {
+                                "color": "#334e87"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape.natural",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#023e58"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#283d6a"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#6f9ba5"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#1d2c4d"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#023e58"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#3C7680"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#304a7d"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#98a5be"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#1d2c4d"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#2c6675"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                            {
+                                "color": "#255763"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#b0d5ce"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#023e58"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#98a5be"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#1d2c4d"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit.line",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#283d6a"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit.station",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#3a4762"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#0e1626"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#4e6d70"
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            //player 1 paddle icon
+            var player1icon = {
+                //Variable to add in Custom Image of Movie theater
+                url: "assets/images/pingpongpaddle.png", // url
+                scaledSize: new google.maps.Size(50, 50), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(0, 0) // anchor
+            }; playMmarker1 = new google.maps.Marker({
+                position: player_1_icon_loc,
+                map: map,
+                icon: player1icon
+            });
+
+            //player 2 paddle icon
+            var player2icon = {
+                //Variable to add in Custom Image of Movie theater
+                url: "assets/images/pingpongpaddle.png", // url
+                scaledSize: new google.maps.Size(50, 50), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(0, 0) // anchor
+            }; playMarker2 = new google.maps.Marker({
+                position: player_2_icon_loc,
+                map: map,
+                icon: player2icon
+            });
+
+            //ball icon
+            var ballIcon = {
+                //Variable to add in Custom Image of Movie theater
+                url: "assets/images/surprisedemoji.png", // url
+                scaledSize: new google.maps.Size(50, 50), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(0, 0) // anchor
+            }; ballMarker = new google.maps.Marker({
+                position: ball_icon_loc,
+                map: map,
+                icon: ballIcon
+            });
+
+
+            mapBounds = new google.maps.LatLngBounds();
+            mapBounds.extend(player_1_icon_loc);
+            mapBounds.extend(player_2_icon_loc);
+            mapBounds.extend(ball_icon_loc);
+            map.fitBounds(mapBounds);
+            isMapOn = true;
+        };
+
+
+        var updateBallIcon = function () {
+            ballMarker.setPosition(new google.maps.LatLng(parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon)));
+        };
+
+    </script>
+
+    <script>
+        var connConfig;  //global variable
+
+
+        $(document).ready(function () {
+            //starts the db connection
+            startConnection();
+        });
+    </script>
+
+</body>
+
+</html>
