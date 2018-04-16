@@ -427,7 +427,7 @@ var initMap = function () {
                 "elementType": "geometry",
                 "stylers": [
                     {
-                        "color": "#1d2c4d"
+                        "color": "#556b2f" 
                     }
                 ]
             },
@@ -452,7 +452,7 @@ var initMap = function () {
                 "elementType": "geometry.stroke",
                 "stylers": [
                     {
-                        "color": "#4b6878"
+                        "color": "#556b2f#6477"
                     }
                 ]
             },
@@ -479,7 +479,7 @@ var initMap = function () {
                 "elementType": "geometry.stroke",
                 "stylers": [
                     {
-                        "color": "#334e87"
+                        "color": "#556b2f"
                     }
                 ]
             },
@@ -488,7 +488,7 @@ var initMap = function () {
                 "elementType": "geometry",
                 "stylers": [
                     {
-                        "color": "#023e58"
+                        "color": "#556b2f"
                     }
                 ]
             },
@@ -497,7 +497,7 @@ var initMap = function () {
                 "elementType": "geometry",
                 "stylers": [
                     {
-                        "color": "#283d6a"
+                        "color": "00b300"
                     }
                 ]
             },
@@ -524,7 +524,7 @@ var initMap = function () {
                 "elementType": "geometry.fill",
                 "stylers": [
                     {
-                        "color": "#023e58"
+                        "color": "#556b2f"
                     }
                 ]
             },
@@ -641,7 +641,7 @@ var initMap = function () {
                 "elementType": "geometry",
                 "stylers": [
                     {
-                        "color": "#0e1626"
+                        "color": "#778899"
                     }
                 ]
             },
@@ -650,7 +650,7 @@ var initMap = function () {
                 "elementType": "labels.text.fill",
                 "stylers": [
                     {
-                        "color": "#4e6d70"
+                        "color": "#778899"
                     }
                 ]
             }
