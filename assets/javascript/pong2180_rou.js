@@ -48,6 +48,19 @@ var ballMarker;
 var isMapOn = false;
 
 
+//var for maps
+//player 1 paddle icon
+var player1icon;
+var playMmarker1;
+var playerMissedIcon;
+var play1MissedMarker;
+var play2MissedMarker;
+var player2icon;
+var playMarker2;
+var missedBallIcon;
+
+
+
 var theaterObj = {   //main object for the whole theater
     //variables are here
     searchLoc: {
@@ -331,11 +344,11 @@ var startConnection = function () {
     connectedRef = database.ref(".info/connected");
 
 
-       //add in for refresh bit
-        dbRefreshScreenBit.on("value", function (snap) {
-            //refresh bit has been triggered
-            db_ReadBallRec();
-        });
+    //add in for refresh bit
+    dbRefreshScreenBit.on("value", function (snap) {
+        //refresh bit has been triggered
+        db_ReadBallRec();
+    });
 };
 
 
@@ -427,7 +440,7 @@ var initMap = function () {
                 "elementType": "geometry",
                 "stylers": [
                     {
-                        "color": "#556b2f" 
+                        "color": "#556b2f"
                     }
                 ]
             },
@@ -658,39 +671,80 @@ var initMap = function () {
     });
 
     //player 1 paddle icon
-    var player1icon = {
+    player1icon = {
         //Variable to add in Custom Image of Movie theater
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
-    }; playMmarker1 = new google.maps.Marker({
+    };
+
+    playMmarker1 = new google.maps.Marker({
         position: player_1_icon_loc,
         map: map,
         icon: player1icon
     });
 
+    //player 1 missed
+    playerMissedIcon = {
+        //Variable to add in Custom Image of Movie theater
+        url: "assets/images/missedBallPaddle1.gif", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+    };
+
+    // play2MissedMarker = new google.maps.Marker({
+    //     position: player_2_icon_loc,
+    //     map: map,
+    //     draggable: false,
+    //     optimized: false,
+    //     animation: google.maps.Animation.DROP,
+    //     icon: player1missedIcon
+    // });
+
     //player 2 paddle icon
-    var player2icon = {
+    player2icon = {
         //Variable to add in Custom Image of Movie theater
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
-    }; playMarker2 = new google.maps.Marker({
+    };
+
+    playMarker2 = new google.maps.Marker({
         position: player_2_icon_loc,
         map: map,
         icon: player2icon
     });
 
+    //missed ball
+    missedBallIcon = {
+        //Variable to add in Custom Image of Movie theater
+        url: "assets/images/youmissed.png", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+    };
+
+    // playMarker2 = new google.maps.Marker({
+    //     //position: ball_icon_loc,
+    //     position: player_2_icon_loc,
+    //     map: map,
+    //     icon: missedBallIcon
+    // });
+
+
     //ball icon
-    var ballIcon = {
+    ballIcon = {
         //Variable to add in Custom Image of Movie theater
         url: "assets/images/surprisedemoji.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
-    }; ballMarker = new google.maps.Marker({
+    };
+
+    ballMarker = new google.maps.Marker({
         position: ball_icon_loc,
         map: map,
         icon: ballIcon
@@ -698,11 +752,46 @@ var initMap = function () {
 
 
     mapBounds = new google.maps.LatLngBounds();
-    mapBounds.extend( player_1_icon_loc );
-    mapBounds.extend( player_2_icon_loc );
-    mapBounds.extend( ball_icon_loc );
+    mapBounds.extend(player_1_icon_loc);
+    mapBounds.extend(player_2_icon_loc);
+    mapBounds.extend(ball_icon_loc);
     map.fitBounds(mapBounds);
     isMapOn = true;
+};
+
+
+var displMissedPlayer = function (playNum, dispOn) {
+    if (playNum == 1) {
+        //player #1
+        if (dispOn == true) {
+            play1MissedMarker = new google.maps.Marker({
+                position: player_1_icon_loc,
+                map: map,
+                draggable: false,
+                optimized: false,
+                animation: google.maps.Animation.DROP,
+                icon: playerMissedIcon
+            });
+        } else {
+            //player #1 
+            play1MissedMarker.setMap(null);
+        };
+    } else {
+        //must be player #2
+        if (dispOn == true) {
+            play2MissedMarker = new google.maps.Marker({
+                position: player_2_icon_loc,
+                map: map,
+                draggable: false,
+                optimized: false,
+                animation: google.maps.Animation.DROP,
+                icon: playerMissedIcon
+            });
+        } else {
+            //player #1 
+            play2MissedMarker.setMap(null);
+        };
+    };
 };
 
 
