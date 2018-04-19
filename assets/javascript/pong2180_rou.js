@@ -62,6 +62,7 @@ var missedBallMarker;
 var isPlay1_miss_on = false;
 var isPlay2_miss_on = false;
 var isBall_miss_on = false;
+var ball_miss_pos = {};
 
 
 
@@ -394,6 +395,11 @@ var db_ReadBallRec = function () {
                 updateBallIcon();
             } else {
                 initMap();
+            };
+
+            if (dbfi.ball_active == 1 && isBall_miss_on==true ) {
+                //the ball is moving, so should wipe out the missed ball
+                dispMissedBall(false);
             };
 
             if (dbfi.dirFrom === 1) {
@@ -744,13 +750,14 @@ var initMap = function () {
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
+        anchor: new google.maps.Point(27, 17) // anchor
     };
 
     playMmarker1 = new google.maps.Marker({
         position: player_1_icon_loc,
         map: map,
-        icon: player1icon
+        icon: player1icon,
+        zIndex: 0
     });
 
     //player 1 missed
@@ -759,7 +766,7 @@ var initMap = function () {
         url: "assets/images/missedBallPaddle1.gif", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
+        anchor: new google.maps.Point(27, 17) // anchor
     };
 
     // play2MissedMarker = new google.maps.Marker({
@@ -777,13 +784,14 @@ var initMap = function () {
         url: "assets/images/pingpongpaddle.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
+        anchor: new google.maps.Point(27, 17) // anchor
     };
 
     playMarker2 = new google.maps.Marker({
         position: player_2_icon_loc,
         map: map,
-        icon: player2icon
+        icon: player2icon,
+        zIndex: 0
     });
 
     //missed ball
@@ -792,7 +800,7 @@ var initMap = function () {
         url: "assets/images/youmissed.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
+        anchor: new google.maps.Point(25, 25) // anchor
     };
 
     // playMarker2 = new google.maps.Marker({
@@ -809,13 +817,14 @@ var initMap = function () {
         url: "assets/images/surprisedemoji.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
+        anchor: new google.maps.Point(25, 25) // anchor
     };
 
     ballMarker = new google.maps.Marker({
         position: ball_icon_loc,
         map: map,
-        icon: ballIcon
+        icon: ballIcon,
+        zIndex: 3
     });
 
 
@@ -839,7 +848,8 @@ var displMissedPlayer = function (playNum, dispOn) {
                     draggable: false,
                     optimized: false,
                     animation: google.maps.Animation.DROP,
-                    icon: playerMissedIcon
+                    icon: playerMissedIcon,
+                    zIndex: 2
                 });
             };
             isPlay1_miss_on = true;
@@ -860,7 +870,8 @@ var displMissedPlayer = function (playNum, dispOn) {
                     draggable: false,
                     optimized: false,
                     animation: google.maps.Animation.DROP,
-                    icon: playerMissedIcon
+                    icon: playerMissedIcon,
+                    zIndex: 2
                 });
             };
             isPlay2_miss_on = true;
@@ -879,11 +890,14 @@ var dispMissedBall = function (dispOn) {
     if (dispOn == true) {
         if (isBall_miss_on == false) {
             //only turn on if it has not been turned on before
+            //store the ball_miss_pos in a global variable but don't think it is needed because when clearing it, it sets it to null
+            ball_miss_pos = { lat: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), lng: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon) };
             missedBallMarker = new google.maps.Marker({
                 //position: ball_icon_loc,
-                position: { lat: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), lng: parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon) },
+                position: ball_miss_pos,
                 map: map,
-                icon: missedBallIcon
+                icon: missedBallIcon,
+                zIndex: 4
             });
             isBall_miss_on = true;
         };
