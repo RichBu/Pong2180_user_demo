@@ -8,12 +8,17 @@ var configData = {
     dispRichOutput: false,
     dispRichTestFalseGPS: false,   //punch in known values for GPS
     keyAPIgoogle: "AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk",
-    keyAPIgoogleRich: "AIzaSyCrHKoPEISSoDAClePzcHVJVHB7G1-xb6s",
     firebaseStorage: "/games/user",         //prior to tacking on user number
     firebaseMainGame: "/games",
     firebaseStatusFolder: "/status",
     firebaseRefreshBit: "/games/time",
     firebaseActive: true
+};
+
+
+var origPlayerPos = { //storage of data 
+    play_1: {},
+    play_2: {}
 };
 
 
@@ -367,6 +372,9 @@ var db_ReadBallRec = function () {
         dbIncomingRec.once("value", function (snap) {
             //a valud read was done
             db_firebase_rec_in = jQuery.extend(true, {}, snap.val());
+            origPlayerPos.Play_1 = db_firebase_rec_in.play_1;
+            origPlayerPos.Play_2 = db_firebase_rec_in.play_2;
+
             var dbfi = db_firebase_rec_in; //short cut notations
 
             $('#ball-pos-x').text(numeral(dbfi.ball_curr_pos.pos_X).format('0,0.00'));
