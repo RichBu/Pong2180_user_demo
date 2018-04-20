@@ -405,7 +405,7 @@ var db_ReadBallRec = function () {
                 initMap();
             };
 
-            if (dbfi.ball_active == 1 && isBall_miss_on==true ) {
+            if (dbfi.ball_active == 1 && isBall_miss_on == true) {
                 //the ball is moving, so should wipe out the missed ball
                 dispMissedBall(false);
             };
@@ -761,12 +761,13 @@ var initMap = function () {
         anchor: new google.maps.Point(27, 17) // anchor
     };
 
-    playMmarker1 = new google.maps.Marker({
-        position: player_1_icon_loc,
-        map: map,
-        icon: player1icon,
-        zIndex: 0
-    });
+    dispPlayer(1);  //disp player #1
+    // playMmarker1 = new google.maps.Marker({
+    //     position: player_1_icon_loc,
+    //     map: map,
+    //     icon: player1icon,
+    //     zIndex: 0
+    // });
 
     //player 1 missed
     playerMissedIcon = {
@@ -795,12 +796,13 @@ var initMap = function () {
         anchor: new google.maps.Point(27, 17) // anchor
     };
 
-    playMarker2 = new google.maps.Marker({
-        position: player_2_icon_loc,
-        map: map,
-        icon: player2icon,
-        zIndex: 0
-    });
+    dispPlayer(2);  //display player #2
+    // playMarker2 = new google.maps.Marker({
+    //     position: player_2_icon_loc,
+    //     map: map,
+    //     icon: player2icon,
+    //     zIndex: 0
+    // });
 
     //missed ball
     missedBallIcon = {
@@ -894,6 +896,33 @@ var displMissedPlayer = function (playNum, dispOn) {
 };
 
 
+
+var dispPlayer = function (playNum) {
+    if (playNum == 1) {
+        playMarker1 = new google.maps.Marker({
+            position: player_1_icon_loc,
+            map: map,
+            draggable: false,
+            optimized: false,
+            icon: player1icon,
+            zIndex: 0
+        });
+    } else {
+        //must be player #2
+        playMarker2 = new google.maps.Marker({
+            position: player_2_icon_loc,
+            map: map,
+            draggable: false,
+            optimized: false,
+            icon: player2icon,
+            zIndex: 0
+        });
+
+    };
+};
+
+
+
 var dispMissedBall = function (dispOn) {
     if (dispOn == true) {
         if (isBall_miss_on == false) {
@@ -922,3 +951,31 @@ var updateBallIcon = function () {
     ballMarker.setPosition(new google.maps.LatLng(parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lat), parseFloat(db_firebase_rec_in.ball_curr_pos.loc_GPS_lon)));
 };
 
+
+
+var checkPlayPos = function (playNum) {
+    if (playNum === 1) {
+        if ((parseFloat(origPlayerPos.play_1.locat_GPS_lat) === parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lat)) ||
+            (parseFloat(origPlayerPos.play_1.locat_GPS_lon) === parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lon))) {
+            //player #1 has changed 
+            return (true)
+        } else {
+            return (false);
+        };
+    } else if (playNum === 2) {
+        if ((parseFloat(origPlayerPos.play_2.locat_GPS_lat) === parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lat)) ||
+            (parseFloat(origPlayerPos.play_2.locat_GPS_lon) === parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lon))) {
+            //player #1 has changed 
+            return (true)
+        } else {
+            return (false);
+        };
+    };
+};
+
+
+
+var dispMovedPlayer = function (playNum) {
+    //a player has moved
+
+};
