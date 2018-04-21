@@ -401,6 +401,12 @@ var db_ReadBallRec = function () {
 
             if (isMapOn == true) {
                 updateBallIcon();
+                if (checkPlayPos(1) == true ) {
+                    dispMovedPlayer(1);
+                };
+                if (checkPlayPos(2) == true ) {
+                    dispMovedPlayer(2);
+                };
             } else {
                 initMap();
             };
@@ -762,12 +768,6 @@ var initMap = function () {
     };
 
     dispPlayer(1);  //disp player #1
-    // playMmarker1 = new google.maps.Marker({
-    //     position: player_1_icon_loc,
-    //     map: map,
-    //     icon: player1icon,
-    //     zIndex: 0
-    // });
 
     //player 1 missed
     playerMissedIcon = {
@@ -778,14 +778,6 @@ var initMap = function () {
         anchor: new google.maps.Point(27, 17) // anchor
     };
 
-    // play2MissedMarker = new google.maps.Marker({
-    //     position: player_2_icon_loc,
-    //     map: map,
-    //     draggable: false,
-    //     optimized: false,
-    //     animation: google.maps.Animation.DROP,
-    //     icon: player1missedIcon
-    // });
 
     //player 2 paddle icon
     player2icon = {
@@ -797,12 +789,6 @@ var initMap = function () {
     };
 
     dispPlayer(2);  //display player #2
-    // playMarker2 = new google.maps.Marker({
-    //     position: player_2_icon_loc,
-    //     map: map,
-    //     icon: player2icon,
-    //     zIndex: 0
-    // });
 
     //missed ball
     missedBallIcon = {
@@ -812,13 +798,6 @@ var initMap = function () {
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(25, 25) // anchor
     };
-
-    // playMarker2 = new google.maps.Marker({
-    //     //position: ball_icon_loc,
-    //     position: player_2_icon_loc,
-    //     map: map,
-    //     icon: missedBallIcon
-    // });
 
 
     //ball icon
@@ -977,5 +956,28 @@ var checkPlayPos = function (playNum) {
 
 var dispMovedPlayer = function (playNum) {
     //a player has moved
-
+    if (playNum == 1) {
+        //player #1 has moved
+        if (playMarker1 != undefined) {
+            playMarker1.setMap(null);
+        };
+        //if missed player was displayed, toggle it off then back on
+        if (isPlay1_miss_on == true) {
+            displMissedPlayer(1, false); //hide the 
+            displMissedPlayer(1, true); //turn back on         
+        };
+        dispPlayer(1);
+    } else if (playNum == 2) {
+        //player #2 has moved
+        if (playMarker2 != undefined) {
+            playMarker2.setMap(null);
+        };
+        //if missed player was displayed, toggle it off then back on
+        if (isPlay2_miss_on == true) {
+            displMissedPlayer(2, false); //hide the 
+            displMissedPlayer(2, true); //turn back on         
+        };
+        dispPlayer(2);
+    };
 };
+
