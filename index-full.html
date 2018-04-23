@@ -38,36 +38,56 @@
                     </button>
                     <div class="wrapper">
                         <div class="row">
+                            <div id="inputSect" style="margin:3px; padding:3px">
+                                <label for="number-input">Address you are at</label>
+                                <input type="text" id="input-addr" style="display:inline;" maxlength="40" size="40">
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+                            <div class="col-md-2 col-sm-2">
                                 <label>Ball : </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
+                                <label>X pos</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id="ball-pos-x">- - - - </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Y pos</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id="ball-pos-y">- - - - </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
                                 <label>Lat </label>
                             </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-pos-lat">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label>Lon </label>
                             </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-pos-lon">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label>Speed </label>
                             </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-vel-in">- - - - </label>
                             </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-vel-mph">- - - - </label>
                             </div>
                         </div>
@@ -81,78 +101,71 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2">
+                            <div class="col-md-2">
                                 <label>Distances:</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id=""> </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label>player #1</label>
+                            <div class="col-md-2">
+                                <label>to player #1</label>
                             </div>
-                            <div class="col-md-4 col-sm-6 col-xs-8">
+                            <div class="col-md-2">
+                                <label id="ball-dist-play1">- - - - </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id="ball-miles-play1">- - - - </label>
+                            </div>
+                            <div class="col-md-4">
                                 <label id="loc-play1">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label> </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label id="ball-dist-play1">- - - - </label>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label id="ball-miles-play1">- - - - </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label> </label>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-time-play1">- - - - </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-min-play1">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label>player #2</label>
+                            <div class="col-md-2">
+                                <label>to player #2</label>
                             </div>
-                            <div class="col-md-4 col-sm-6 col-xs-8">
+                            <div class="col-md-2">
+                                <label id="ball-dist-play2">- - - - </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label id="ball-miles-play2">- - - - </label>
+                            </div>
+                            <div class="col-md-4">
                                 <label id="loc-play2">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label> </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label id="ball-dist-play2">- - - - </label>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label id="ball-miles-play2">- - - - </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label> </label>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-time-play2">- - - - </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-min-play2">- - - - </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-sm-2 col-xs-3">
-                                <label>player #1 to #2</label>
+                            <div class="col-md-2">
+                                <label>between players </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-dist-total">- - - - </label>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-3">
+                            <div class="col-md-2">
                                 <label id="ball-miles-total">- - - - </label>
                             </div>
                         </div>
@@ -186,9 +199,8 @@
                     <p>Information:</p>
                 </h2>
                 <p>Demonstration of Pong 2180</p>
-                <p>Demo not fully styled, shows a game in progress</p>
-                <p>Ball is moving and the players can be moving also</p>
-                <p>being re-written for react</p>
+                <p>Demo to show: 1. GPS entry 2. Address Generation</p>
+                <p>3. Firebase disp coord 4. Google Maps Display</p>
                 <p></p>
             </div>
         </div>

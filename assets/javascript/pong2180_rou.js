@@ -403,13 +403,11 @@ var db_ReadBallRec = function () {
             if (isMapOn == true) {
                 updateBallIcon();
                 if (checkPlayPos(1) != true ) {
-                    console.log('#1 changed');
                     dispMovedPlayer(1);
                     origPlayerPos.play_1.locat_GPS_lat = fbase_ballpos_inputObj.play_1.locat_GPS_lat;
                     origPlayerPos.play_1.locat_GPS_lon = fbase_ballpos_inputObj.play_1.locat_GPS_lon;
-                } else { console.log('#1 same'); }
+                };
                 if (checkPlayPos(2) != true ) {
-                    console.log('#2 changed');
                     dispMovedPlayer(2);
                     origPlayerPos.play_2.locat_GPS_lat = fbase_ballpos_inputObj.play_2.locat_GPS_lat;
                     origPlayerPos.play_2.locat_GPS_lon = fbase_ballpos_inputObj.play_2.locat_GPS_lon;
@@ -441,7 +439,6 @@ var db_ReadBallRec = function () {
                 };
                 if (dbfi.hit_play_2 === 1) {
                     displMissedPlayer(2, true);
-                    console.log("play 2 hit");
                 };
             };
 
@@ -952,40 +949,30 @@ var updateMapBounds = function() {
 
 var checkPlayPos = function (playNum) {
     //send true if same
-    console.log('check player position');
-    // console.log( 'orig play\n');
-    // console.log ( origPlayerPos );
-    // console.log( 'fbase \n' );
-    // console.log( fbase_ballpos_inputObj );
     var orig_lat;
     var orig_lon;
     var play_lat;
     var play_lon;
     if (playNum === 1) {
-        console.log('checking player #1')
         orig_lat = parseFloat(origPlayerPos.play_1.locat_GPS_lat);
         orig_lon = parseFloat(origPlayerPos.play_1.locat_GPS_lon);
         play_lat = parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lat);
         play_lon = parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lon);
-        console.log ('orig: ' + orig_lat + ' , ' + orig_lon );
-        console.log ('play: ' + play_lat + ' , ' + play_lon );
+        // console.log ('orig: ' + orig_lat + ' , ' + orig_lon );
+        // console.log ('play: ' + play_lat + ' , ' + play_lon );
         if ((parseFloat(origPlayerPos.play_1.locat_GPS_lat) === parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lat)) &&
             (parseFloat(origPlayerPos.play_1.locat_GPS_lon) === parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lon))) {
             //player #1 has changed 
-            console.log('play #1 same');
             return (true)
         } else {
-            console.log('play #1 diff');
             return (false);
         };
     } else if (playNum === 2) {
         if ((parseFloat(origPlayerPos.play_2.locat_GPS_lat) === parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lat)) &&
             (parseFloat(origPlayerPos.play_2.locat_GPS_lon) === parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lon))) {
             //player #1 has changed 
-            console.log('play #2 same');
             return (true)
         } else {
-            console.log('play #2 diff');
             return (false);
         };
     };
@@ -996,7 +983,6 @@ var checkPlayPos = function (playNum) {
 var dispMovedPlayer = function (playNum) {
     //a player has moved
     playNum = parseInt(playNum);
-    console.log('moving a player');
     if (playNum == 1) {
         //player #1 has moved
         if (playMarker1 != undefined) {
