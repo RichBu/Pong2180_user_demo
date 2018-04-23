@@ -824,11 +824,12 @@ var initMap = function () {
     });
 
 
-    mapBounds = new google.maps.LatLngBounds();
-    mapBounds.extend(player_1_icon_loc);
-    mapBounds.extend(player_2_icon_loc);
-    mapBounds.extend(ball_icon_loc);
-    map.fitBounds(mapBounds);
+    updateMapBounds();
+    // mapBounds = new google.maps.LatLngBounds();
+    // mapBounds.extend(player_1_icon_loc);
+    // mapBounds.extend(player_2_icon_loc);
+    // mapBounds.extend(ball_icon_loc);
+    // map.fitBounds(mapBounds);
     isMapOn = true;
 };
 
@@ -938,6 +939,16 @@ var updateBallIcon = function () {
 };
 
 
+var updateMapBounds = function() {
+    if (mapBounds != null ) { mapBounds = null; };
+    mapBounds = new google.maps.LatLngBounds();
+    mapBounds.extend(player_1_icon_loc);
+    mapBounds.extend(player_2_icon_loc);
+    mapBounds.extend(ball_icon_loc);
+    map.fitBounds(mapBounds);    
+};
+
+
 
 var checkPlayPos = function (playNum) {
     //send true if same
@@ -991,25 +1002,27 @@ var dispMovedPlayer = function (playNum) {
         if (playMarker1 != undefined) {
             playMarker1.setMap(null);
         };
+        player_1_icon_loc = { lat: parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lat), lng: parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lon) };
         //if missed player was displayed, toggle it off then back on
         if (isPlay1_miss_on == true) {
             displMissedPlayer(1, false); //hide the 
             displMissedPlayer(1, true); //turn back on         
         };
-        player_1_icon_loc = { lat: parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lat), lng: parseFloat(fbase_ballpos_inputObj.play_1.locat_GPS_lon) };
         dispPlayer(1);
+        updateMapBounds();
     } else if (playNum == 2) {
         //player #2 has moved
         if (playMarker2 != undefined) {
             playMarker2.setMap(null);
         };
+        player_2_icon_loc = { lat: parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lat), lng: parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lon) };    
         //if missed player was displayed, toggle it off then back on
         if (isPlay2_miss_on == true) {
             displMissedPlayer(2, false); //hide the 
             displMissedPlayer(2, true); //turn back on         
         };
-        player_2_icon_loc = { lat: parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lat), lng: parseFloat(fbase_ballpos_inputObj.play_2.locat_GPS_lon) };    
         dispPlayer(2);
+        updateMapBounds();
     };
 };
 
