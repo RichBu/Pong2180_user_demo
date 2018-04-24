@@ -822,11 +822,6 @@ var initMap = function () {
 
 
     updateMapBounds();
-    // mapBounds = new google.maps.LatLngBounds();
-    // mapBounds.extend(player_1_icon_loc);
-    // mapBounds.extend(player_2_icon_loc);
-    // mapBounds.extend(ball_icon_loc);
-    // map.fitBounds(mapBounds);
     isMapOn = true;
 };
 
