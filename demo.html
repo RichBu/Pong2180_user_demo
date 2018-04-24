@@ -32,6 +32,43 @@
 
 <body>
 
+    <header style="color:white; ">
+        <div class="row">
+            <!--Site Logo-->
+            <div class="col-xs-4">
+                <a href='/'>
+                    <img src="" alt='Pong 2108 Logo' id='pageLogo' class='img img-thumbnail' style="width: 80px;">
+                </a>
+            </div>
+            <!--Title-->
+            <div class="col-xs-4">
+                <h1 class='bungeeFont' style='color:white; '>Pong 2180 Demo</h1>
+            </div>
+            <!--Logged In Area-->
+            <div class="col-xs-4">
+                <button type="button" id="info" class="btn btn-default btn-lg btn-warning" style="margin: 0px 0px 0px 50px;">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <style>
+        header {
+            color: white;
+            background-image: linear-gradient(180deg, rgba(224, 133, 14, 1), rgba(173, 52, 62, 1));
+        }
+
+        body {
+            background-image: url('./assets/images/matrixgridfloor.png');
+        }
+
+        .monotonFont {
+            font-family: 'Monoton', cursive;
+        }
+    </style>
+
 
     <div class="wrapper" id="page1">
         <div class="container" style='opacity: 0.90; width: 480px;'>
@@ -356,6 +393,18 @@
             });
         </script>
 
+        <div class="text-center navbar navbar-fixed-bottom" id='footer'>
+            <div class="container-fluid">
+                <span id='copyright'>© 2180 Pong 2180 Corp.</span>
+            </div>
+        </div>
+        <style>
+            .navbar-fixed-bottom {
+                background-image: linear-gradient(180deg, rgba(173, 52, 62, 1), rgba(224, 133, 14, 1));
+                color: rgba(255, 255, 255, .6);
+                padding: 20px;
+            }
+        </style>
 
 </body>
 
